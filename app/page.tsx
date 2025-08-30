@@ -8,7 +8,7 @@ import ErrorMessage from './components/ErrorMessage'
 export default function Home() {
   const [weatherData, setWeatherData] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchWeatherData()
@@ -27,7 +27,8 @@ export default function Home() {
       const data = await response.json()
       setWeatherData(data)
     } catch (err) {
-      setError(err.message)
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
