@@ -102,11 +102,12 @@ All colors MUST be HSL.
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
   }
 }
 
@@ -118,4 +119,27 @@ All colors MUST be HSL.
 .clothing-icon {
   width: 60px;
   height: 60px;
+}
+
+/* Fallback styles to ensure design system works */
+.card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+
+.text-foreground {
+  color: hsl(var(--foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+.bg-card {
+  background-color: hsl(var(--card));
+}
+
+.border {
+  border-color: hsl(var(--border));
 }
