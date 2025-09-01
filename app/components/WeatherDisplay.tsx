@@ -1,6 +1,6 @@
 import { Card } from './ui/card'
 import { CloudDrizzle, Thermometer, Droplets, Wind, Eye, Gauge } from 'lucide-react'
-import Image from 'next/image'
+import OutfitDisplay from './OutfitDisplay'
 
 interface WeatherData {
   location: {
@@ -74,13 +74,7 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
               <h2 className="text-xl font-semibold text-foreground">What to Wear</h2>
             </div>
             <div className="aspect-[4/3] rounded-lg overflow-hidden mb-4 mx-auto max-w-xs">
-              <Image 
-                src={clothing.image} 
-                alt={clothing.recommendation}
-                width={300}
-                height={225}
-                className="w-full h-full object-cover"
-              />
+              <OutfitDisplay className="w-full h-full" />
             </div>
             <h3 className="text-lg font-medium text-foreground mb-1">
               {clothing.recommendation}
