@@ -1,8 +1,6 @@
-import WeatherIcon from './WeatherIcon'
-import ClothingIcon from './ClothingIcon'
-import AirQualityIndicator from './AirQualityIndicator'
+import { Card } from './ui/card'
+import { CloudDrizzle, Thermometer, Droplets, Wind, Eye, Gauge } from 'lucide-react'
 import Image from 'next/image'
-import { Droplets, Wind, Gauge } from 'lucide-react'
 
 interface WeatherData {
   location: {
@@ -32,87 +30,123 @@ interface WeatherDisplayProps {
 }
 
 export default function WeatherDisplay({ data }: WeatherDisplayProps) {
-  const getClothingRecommendation = (temp: number, weather: string) => {
-    if (temp >= 25) return 't-shirt'
-    if (temp >= 20) return 'light-jacket'
-    if (temp >= 15) return 'jacket'
-    if (temp >= 10) return 'sweater'
-    if (temp >= 7) return 'coat'
-    if (weather.toLowerCase().includes('rain')) return 'raincoat'
-    if (weather.toLowerCase().includes('snow')) return 'winter-coat'
-    return 'winter-coat'
-  }
+  const getClothingRecommendation = (temp: number) => {
+    if (temp < 10) {
+      return {
+        image: '/polaire.webp',
+        recommendation: 'Dress warmly',
+        description: 'Wear a thick coat, scarf, and warm boots'
+      };
+    } else if (temp > 25) {
+      return {
+        image: '/polaire.webp',
+        recommendation: 'Dress lightly',
+        description: 'Perfect weather for t-shirt and shorts'
+      };
+    } else {
+      return {
+        image: '/polaire.webp',
+        recommendation: 'Layer up',
+        description: 'Light sweater or jacket recommended'
+      };
+    }
+  };
 
-  const clothingType = getClothingRecommendation(data.current.temperature, data.current.main)
+  const getAirQualityLabel = (aqi: number) => {
+    if (aqi <= 50) return { label: 'Good', color: 'text-green-600' };
+    if (aqi <= 100) return { label: 'Moderate', color: 'text-yellow-600' };
+    if (aqi <= 150) return { label: 'Unhealthy for Sensitive', color: 'text-orange-600' };
+    return { label: 'Unhealthy', color: 'text-red-600' };
+  };
+
+  const clothing = getClothingRecommendation(data.current.temperature);
+  const airQuality = data.air_quality ? getAirQualityLabel(data.air_quality.aqi) : { label: 'Unknown', color: 'text-muted-foreground' };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Left: What to Wear */}
-      <div className="rounded-3xl bg-white shadow-[0_2px_30px_rgba(0,0,0,0.06)] p-6">
-        <div className="flex items-center gap-2 text-neutral-900 font-semibold mb-4">
-          <span className="text-blue-600">💡</span>
-          What to Wear
-        </div>
-        <div className="rounded-2xl overflow-hidden bg-neutral-100 mb-5 aspect-[4/3] relative">
-          <Image src="/outfit.jpg" alt="Recommended outfit" fill className="object-cover" />
-        </div>
-        <div className="text-center">
-          <div className="text-lg font-semibold text-neutral-900 mb-1">
-            {clothingType === 't-shirt' ? 'T‑shirt' : clothingType.replace('-', ' ')}
+    <div>
+      {/* Main Content */}
+      <div className="grid lg:grid-cols-2 gap-8 mb-8 w-full">
+        {/* Clothing Recommendation */}
+        <Card className="bg-card border overflow-hidden" style={{ boxShadow: 'var(--shadow-weather)' }}>
+          <div className="p-6 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <CloudDrizzle className="h-6 w-6" style={{ color: 'hsl(var(--weather-sky))' }} />
+              <h2 className="text-xl font-semibold text-foreground">What to Wear</h2>
+            </div>
+            <div className="aspect-[4/3] rounded-lg overflow-hidden mb-4 mx-auto max-w-xs">
+              <Image 
+                src={clothing.image} 
+                alt={clothing.recommendation}
+                width={300}
+                height={225}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <h3 className="text-lg font-medium text-foreground mb-1">
+              {clothing.recommendation}
+            </h3>
+            <p className="text-muted-foreground">
+              {clothing.description}
+            </p>
           </div>
-          <p className="text-neutral-500">
-            {data.current.temperature <= 10 ? 'Layer up' : data.current.temperature >= 25 ? 'Dress light' : 'Light sweater or jacket recommended'}
-          </p>
-        </div>
-      </div>
+        </Card>
 
-      {/* Right: Current Temperature */}
-      <div className="rounded-3xl bg-white shadow-[0_2px_30px_rgba(0,0,0,0.06)] p-6">
-        <div className="flex items-center gap-2 text-neutral-900 font-semibold mb-4">
-          <span className="text-blue-600">🌡️</span>
-          Current Temperature
-        </div>
-        <div className="flex flex-col items-center justify-center py-6">
-          <div className="text-6xl md:text-7xl font-extrabold text-neutral-900">
-            {data.current.temperature}°C
-          </div>
-          <div className="mt-2 text-neutral-500 capitalize">{data.current.description}</div>
-          <div className="mt-2 text-neutral-400 text-sm">Feels like {data.current.feels_like}°C</div>
-        </div>
-      </div>
-
-      {/* Bottom Stats */}
-      <div className="rounded-3xl bg-white shadow-[0_2px_30px_rgba(0,0,0,0.06)] p-6">
-        <div className="flex items-center gap-3 text-blue-600"><Droplets />
-          <div>
-            <div className="text-2xl font-bold text-neutral-900">{data.current.humidity}%</div>
-            <div className="text-neutral-500 text-sm">Humidity</div>
-          </div>
-        </div>
-      </div>
-      <div className="rounded-3xl bg-white shadow-[0_2px_30px_rgba(0,0,0,0.06)] p-6">
-        <div className="flex items-center gap-3 text-blue-600"><Wind />
-          <div>
-            <div className="text-2xl font-bold text-neutral-900">{data.current.wind_speed} km/h</div>
-            <div className="text-neutral-500 text-sm">Wind Speed</div>
-          </div>
-        </div>
-      </div>
-      <div className="rounded-3xl bg-white shadow-[0_2px_30px_rgba(0,0,0,0.06)] p-6">
-        {data.air_quality ? (
-          <div className="flex items-center gap-3 text-blue-600"><Gauge />
-            <div>
-              <div className="text-2xl font-bold text-neutral-900">{data.air_quality.aqi}</div>
-              <div className="text-green-600 text-sm font-medium">
-                <AirQualityIndicator aqi={data.air_quality.aqi} />
-              </div>
-              <div className="text-neutral-500 text-sm">Air Quality</div>
+        {/* Current Temperature */}
+        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-weather)' }}>
+          <div className="p-6 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Thermometer className="h-8 w-8" style={{ color: 'hsl(var(--weather-sky))' }} />
+              <h2 className="text-xl font-semibold text-foreground">Current Temperature</h2>
+            </div>
+            <div className="text-5xl md:text-6xl font-bold text-foreground mb-2">
+              {data.current.temperature}°C
+            </div>
+            <p className="text-muted-foreground text-lg mb-4 capitalize">
+              {data.current.description}
+            </p>
+            <div className="flex items-center justify-center gap-2" style={{ color: 'hsl(var(--weather-text-light))' }}>
+              <Eye className="h-4 w-4" />
+              <span>Feels like {data.current.feels_like}°C</span>
             </div>
           </div>
-        ) : (
-          <div className="text-neutral-500">Air quality data unavailable</div>
-        )}
+        </Card>
+      </div>
+
+      {/* Weather Details */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="p-6 text-center">
+            <Droplets className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {data.current.humidity}%
+            </div>
+            <p className="text-muted-foreground">Humidity</p>
+          </div>
+        </Card>
+
+        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="p-6 text-center">
+            <Wind className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {data.current.wind_speed} km/h
+            </div>
+            <p className="text-muted-foreground">Wind Speed</p>
+          </div>
+        </Card>
+
+        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+          <div className="p-6 text-center">
+            <Gauge className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {data.air_quality?.aqi || 'N/A'}
+            </div>
+            <p className={`text-sm ${airQuality.color}`}>
+              {airQuality.label}
+            </p>
+            <p className="text-muted-foreground text-xs">Air Quality</p>
+          </div>
+        </Card>
       </div>
     </div>
-  )
+  );
 }

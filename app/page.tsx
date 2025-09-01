@@ -46,26 +46,29 @@ export default function Home() {
   const today = format(new Date(), 'EEEE, MMMM d, yyyy')
 
   return (
-    <main className="min-h-screen bg-neutral-50 p-6 md:p-10">
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-8 md:mb-10">
-          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-neutral-900">
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-4xl mx-auto flex flex-col items-center">
+        {/* Header */}
+        <div className="text-center mb-8 pt-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-2">
             Weather in Lyon
           </h1>
-          <p className="mt-3 text-neutral-500 text-lg">{today}</p>
-        </header>
+          <p className="text-muted-foreground text-lg">
+            {today}
+          </p>
+        </div>
 
         {weatherData && <WeatherDisplay data={weatherData} />}
 
         <div className="text-center mt-8">
           <button
             onClick={fetchWeatherData}
-            className="inline-flex items-center gap-2 bg-neutral-900 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm hover:bg-neutral-800 transition-colors"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold py-2.5 px-6 rounded-xl shadow-sm hover:bg-primary/90 transition-colors"
           >
             Refresh
           </button>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
