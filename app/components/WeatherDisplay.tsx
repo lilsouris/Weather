@@ -63,17 +63,17 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
   const airQuality = data.air_quality ? getAirQualityLabel(data.air_quality.aqi) : { label: 'Unknown', color: 'text-muted-foreground' };
 
   return (
-    <div>
-      {/* Main Content */}
+    <div className="w-full">
+      {/* Main Content - Two large cards side by side */}
       <div className="grid lg:grid-cols-2 gap-8 mb-8 w-full">
         {/* Clothing Recommendation */}
-        <Card className="bg-card border overflow-hidden" style={{ boxShadow: 'var(--shadow-weather)' }}>
+        <Card className="bg-card border-0 rounded-3xl overflow-hidden shadow-lg">
           <div className="p-6 text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
               <CloudDrizzle className="h-6 w-6" style={{ color: 'hsl(var(--weather-sky))' }} />
               <h2 className="text-xl font-semibold text-foreground">What to Wear</h2>
             </div>
-            <div className="aspect-[4/3] rounded-lg overflow-hidden mb-4 mx-auto max-w-xs">
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-4 mx-auto max-w-xs bg-gray-50">
               <OutfitDisplay className="w-full h-full" />
             </div>
             <h3 className="text-lg font-medium text-foreground mb-1">
@@ -86,13 +86,13 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
         </Card>
 
         {/* Current Temperature */}
-        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-weather)' }}>
+        <Card className="bg-card border-0 rounded-3xl shadow-lg">
           <div className="p-6 text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
               <Thermometer className="h-8 w-8" style={{ color: 'hsl(var(--weather-sky))' }} />
               <h2 className="text-xl font-semibold text-foreground">Current Temperature</h2>
             </div>
-            <div className="text-5xl md:text-6xl font-bold text-foreground mb-2">
+            <div className="text-6xl md:text-7xl font-bold text-foreground mb-2">
               {data.current.temperature}°C
             </div>
             <p className="text-muted-foreground text-lg mb-4 capitalize">
@@ -106,9 +106,9 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
         </Card>
       </div>
 
-      {/* Weather Details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+      {/* Weather Details - Three equal cards in a row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+        <Card className="bg-card border-0 rounded-2xl shadow-md">
           <div className="p-6 text-center">
             <Droplets className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
             <div className="text-2xl font-bold text-foreground mb-1">
@@ -118,7 +118,7 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
           </div>
         </Card>
 
-        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+        <Card className="bg-card border-0 rounded-2xl shadow-md">
           <div className="p-6 text-center">
             <Wind className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
             <div className="text-2xl font-bold text-foreground mb-1">
@@ -128,7 +128,7 @@ export default function WeatherDisplay({ data }: WeatherDisplayProps) {
           </div>
         </Card>
 
-        <Card className="bg-card border" style={{ boxShadow: 'var(--shadow-card)' }}>
+        <Card className="bg-card border-0 rounded-2xl shadow-md">
           <div className="p-6 text-center">
             <Gauge className="h-8 w-8 mx-auto mb-3" style={{ color: 'hsl(var(--weather-sky))' }} />
             <div className="text-2xl font-bold text-foreground mb-1">
