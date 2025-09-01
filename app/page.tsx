@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { format } from 'date-fns'
 import WeatherDisplay from './components/WeatherDisplay'
 import LoadingSpinner from './components/LoadingSpinner'
 import ErrorMessage from './components/ErrorMessage'
@@ -42,26 +43,26 @@ export default function Home() {
     return <ErrorMessage message={error} onRetry={fetchWeatherData} />
   }
 
+  const today = format(new Date(), 'EEEE, MMMM d, yyyy')
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-purple-600 p-4">
-      <div className="max-w-4xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">
-            Weather Forecast
+    <main className="min-h-screen bg-neutral-50 p-6 md:p-10">
+      <div className="max-w-6xl mx-auto">
+        <header className="text-center mb-8 md:mb-10">
+          <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-neutral-900">
+            Weather in Lyon
           </h1>
-          <p className="text-xl text-blue-100">
-            Lyon, France
-          </p>
+          <p className="mt-3 text-neutral-500 text-lg">{today}</p>
         </header>
-        
+
         {weatherData && <WeatherDisplay data={weatherData} />}
-        
+
         <div className="text-center mt-8">
           <button
             onClick={fetchWeatherData}
-            className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 bg-neutral-900 text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm hover:bg-neutral-800 transition-colors"
           >
-            Refresh Weather
+            Refresh
           </button>
         </div>
       </div>
